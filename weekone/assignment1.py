@@ -114,8 +114,29 @@ def is_sorted(arr: StaticArray) -> int:
     """
     TODO: Write this implementation
     """
-    pass
+    # Using transitive property to apply monotonically increasing or decreasing 
+    # sequences
+    # Preserve memory if we found values increasing and decreasing
+    # If both are 1 then this should exit and return 0
+    increasing_flag = None
+    decreasing_flag = None
+    # base case to return
+    if arr.length() == 1:
+        return 1
 
+    for i in range(arr.length()-1):
+        if arr.get(i) < arr.get(i + 1):
+            increasing_flag = 1
+        elif arr.get(i) > arr.get(i + 1):
+            decreasing_flag = 1
+        elif arr.get(i) == arr.get(i + 1):
+            # Break here since we found non strictly increasing or decreasing
+            return 0
+
+        if increasing_flag and decreasing_flag:
+            # Break here since we found non strictly increasing or decreasing
+            return 0
+    return 1 if increasing_flag else -1
 
 # ------------------- PROBLEM 7 - FIND_MODE -----------------------------------
 
