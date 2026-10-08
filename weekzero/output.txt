@@ -1,0 +1,3 @@
+felipezarco@Felipes-MacBook-Air data_structures % /usr/local/bin/python3 /Users/felipezarco/Documents/GitHub/data_structures/weekzero/system_
+test.py
+This is an acceptable version of Python, version 3.13.
