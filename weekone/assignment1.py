@@ -201,7 +201,8 @@ def find_mode(arr: StaticArray) -> tuple[object, int]:
     """
     Find Mode Function
 
-    The function is used to find the statistical mode of the StaticArray
+    The function is used to find the statistical mode of the StaticArray.
+    The array must be in either ascending or descending order for the assumption.
 
     Args:
         arr (StaticArray): StaticArray of object values
@@ -209,27 +210,29 @@ def find_mode(arr: StaticArray) -> tuple[object, int]:
     Returns:
         tuple[object, int] => the mode of StaticArray, integer frequency of appearances in the StaticArray
     """
-    mode = None
-    frequency = None
-    tracker = {}
-    for i in range(arr.length()):
-        temp = arr.get(i)
-        if tracker.get(temp) is None:
-            tracker[temp] = 1
-        else:
-            tracker[temp] += 1
+    # initialize mode and frequency
+    mode = arr.get(0)
+    frequency = 1
+    arr_len = arr.length()
+    # Intialize tracker for looping
+    tracking_val = mode
+    tracking_count = frequency
+    # Since the assumption is the data is already sorted
+    # We can track the count of the values as we're looping through it
+    for i in range(1, arr_len):
+        new_val = arr.get(i)
 
-        if mode is None:
-            # Initialize mode and freq
-            mode = temp
-            frequency = tracker.get(temp)
-        elif (tracker.get(temp) > frequency) and (temp != mode):
-            # Update new mode and frequency
-            mode = temp
-            frequency = tracker.get(temp)
-        elif (temp == mode) and (tracker.get(temp) > frequency):
-            # Update frequency
-            frequency = tracker.get(temp)
+        if new_val == tracking_val:
+            tracking_count += 1
+        else:
+            # If we find a new value, update the tracker
+            tracking_val = new_val
+            tracking_count = 1
+        # If the new value found has a larger frequency
+        # then we updat the mode and frequency
+        if tracking_count > frequency:
+            mode, frequency = tracking_val, tracking_count
+       
     return mode, frequency
 
 
@@ -251,16 +254,29 @@ def remove_duplicates(arr: StaticArray) -> StaticArray:
         StaticArray of dedupped values
     """
     l = arr.length()
-    arr_values = []
+    # Distinct value tracker
+    distinct_values = 1
+    # Initialize dedupped array for export
+    arr_tracker = StaticArray(l)
+    arr_tracker.set(0, arr.get(0))
+    # Initialize distinct counter
+    d = 1
     # O(n)
-    for i in range(arr.length()):
-        temp = arr.get(i)
-        if temp not in arr_values:
-            arr_values.append(temp)
-    arr_export = StaticArray(size=len(arr_values))
-    # O(d) < O(n) => O(n)
-    for i, v in enumerate(arr_values):
-        arr_export.set(i, v)
+    for i in range(1, l):
+        # Get next value in the array
+        new_val = arr.get(i)
+        # If it's new to the previous value
+        # Add it to the arr
+        if new_val != arr_tracker.get(d-1):
+            arr_tracker.set(d, new_val)
+            # Increment distinct counter
+            d += 1
+
+    # Generate the dedupped array
+    # Looping over d times  => d + n < 2n
+    arr_export = StaticArray(d)
+    for k in range(d):
+        arr_export.set(k, arr_tracker.get(k))
 
     return arr_export
         
@@ -282,28 +298,42 @@ def count_sort(arr: StaticArray) -> StaticArray:
     Returns:
         StaticArray of integer values in descending order
     """
-    counter = {}
-    arr_values = [arr.get(i) for i in range(arr.length())]
+    arr_len = arr.length()
+    num_tracker = StaticArray(arr_len)
+    num_tracker.set(0, arr.get(0))
     min, max = min_max(arr)
-    # Look through each value in the array and count them
-    for val in arr_values:
-        counter[val] = counter.get(val, 0) + 1
+    if min > 0:
+        min = 0
+    # initialize k range
+    k = max - min + 1
+    # Initialize the counter for each unique value in the range
+    counter = StaticArray(k)
+    for j in range(k):
+        counter.set(j, 0)
 
-    # From each value in the range of values observed for max and min
-    # we get the cumulative sum of the counts to find how many
-    # values are greater than or equal to the value at that position
-    # If we reverse it, we do the descending sort
-    # for i in range(min + 1, max + 1):
-    for i in range(max - 1, min - 1, -1):
-        # For descending sort we need to look back to the top for cum sum instead of behind
-        counter[i] = counter.get(i, 0) + counter.get(i + 1, 0)
-        # Ascending implementation for looking behind (i.e. i - 1)
-        # counter[i] = counter.get(i, 0) + counter.get(i - 1, 0)
-    count_sorted_arr = StaticArray(arr.length())
-    for ix in range(arr.length() - 1, -1, -1):
-        arr_val = arr.get(ix)
-        counter[arr_val] = counter[arr_val] - 1
-        count_sorted_arr.set(counter[arr_val], arr_val)
+    # Look through each value in the array and count them
+    # [100, 34, 12, 10, -5]
+    # max = 100
+    # min = -5
+    # idx = 100 - (-5)
+    # idx = 105
+    for i in range(arr_len):
+        # Get idx, if min is negative
+        # Idx is offset by the negative value
+        idx = arr.get(i) - min
+        # Set the count for the value in the counter plus 1
+        counter.set(idx, counter.get(idx) + 1)
+    # Cumulative counts (descending order)
+    for k in range(k - 2, -1, -1):
+        counter.set(k, counter.get(k) + counter.get(k + 1))
+    # Now we apply the sorting
+    count_sorted_arr = StaticArray(arr_len)
+    for i in range(arr_len - 1, -1, -1):
+        val = arr.get(i)
+        count_idx = val - min
+        # decreasing the count
+        counter.set(count_idx, counter.get(count_idx) - 1)
+        count_sorted_arr.set(counter.get(count_idx), val)
     return count_sorted_arr
 
 
