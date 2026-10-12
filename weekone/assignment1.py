@@ -236,10 +236,7 @@ def find_mode(arr: StaticArray) -> tuple[object, int]:
 
 # ------------------- PROBLEM 8 - REMOVE_DUPLICATES -------------------------
 
-# [1, 1, 2]
-# [1, 2]
-# 0,1,2
-# 
+
 def remove_duplicates(arr: StaticArray) -> StaticArray:
     """
     StaticArray Duplicate remover
@@ -270,12 +267,7 @@ def remove_duplicates(arr: StaticArray) -> StaticArray:
 
 
 # ------------------- PROBLEM 9 - COUNT_SORT --------------------------------
-# [3, 1, 2, 3, 1]
-# {1: 2, 2: 1, 3: 2}
-# {1: 2, 2: 3, 3: 5}
-# arr_val = 1
-# counter[arr_val] => 2
-# counter[arr_val] -= 1
+
 
 def count_sort(arr: StaticArray) -> StaticArray:
     """
