@@ -15,7 +15,15 @@ from static_array import *
 
 def min_max(arr: StaticArray) -> tuple[int, int]:
     """
-    TODO: Write this implementation
+    Min - Max function method around StaticArray.
+
+    Function calculates the minimum and maximum value of the Static Array.
+
+    Args:
+        arr (StaticArray): StaticArray of integer values
+
+    Returns:
+        tuple[int, int]: min, max of the array of integers
     """
     max = arr.get(0)
     min = arr.get(0)
@@ -33,18 +41,33 @@ def min_max(arr: StaticArray) -> tuple[int, int]:
 
 def fizz_buzz(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    Fizz Buzz Function writer
+
+    Function writes fizz, buzz or fizzbuzz based on the following rules:
+    - "fizzbuzz" if the integer value is divisible by both 5 and 3.
+    - "fizz" if the integer value is divisible by only 3
+    - "buzz" if the integer value is divisible by only 5
+
+    Args:
+        arr (StaticArray): StaticArray of integer values
+    
+    Returns:
+        StaticArray of values written with fizz, buzz, or fizzbuzz with other integer values untouched.
+
     """
+    fizzbuzz_arr = StaticArray(arr.length())
     for i in range(arr.length()):
         val = arr.get(i)
         if val % 5 == 0 and val % 3 == 0:
-            arr.set(i, "fizzbuzz")
+            fizzbuzz_arr.set(i, "fizzbuzz")
         elif val % 3 == 0:
-            arr.set(i, "fizz")
+            fizzbuzz_arr.set(i, "fizz")
         elif val % 5 == 0:
-            arr.set(i, "buzz")
+            fizzbuzz_arr.set(i, "buzz")
+        else:
+            fizzbuzz_arr.set(i, val)
 
-    return arr
+    return fizzbuzz_arr
 
 
 
@@ -53,7 +76,15 @@ def fizz_buzz(arr: StaticArray) -> StaticArray:
 
 def reverse(arr: StaticArray) -> None:
     """
-    TODO: Write this implementation
+    StaticArray Reverser
+
+    Function takes the StaticArray and reverses the array values in-place.
+
+    Args:
+        arr (StaticArray): StaticArray of object data type values
+
+    Returns:
+        None
     """
     l = arr.length()
     midpoint = l // 2
@@ -69,11 +100,20 @@ def reverse(arr: StaticArray) -> None:
 
 def rotate(arr: StaticArray, steps: int) -> StaticArray:
     """
-    TODO: Write this implementation
+    StaticArray rotater
+
+    The function takes a static array and "rotates" or simply shifts the values of the
+    array in a given direction based on the integer steps.
+
+    Args:
+        arr (StaticArray): StaticArray of object values to rotate or shift
+        steps (int): The direction for rotating the values within the StaticArray along
+        with how many steps.
+
+    Returns:
+        StaticArray with values that have been rotated / shifted
     """
     l = arr.length()
-    if steps == 0:
-        return arr
     arr_copy = StaticArray(size=l)
     for i in range(l):
         ix = (i + steps) % l
@@ -87,7 +127,14 @@ def rotate(arr: StaticArray, steps: int) -> StaticArray:
 
 def sa_range(start: int, end: int) -> StaticArray:
     """
-    TODO: Write this implementation
+    Static Array generator for range of values
+
+    Args:
+        start (int): starting point of the StaticArray
+        end (int): end point of the StaticArray
+
+    Returns:
+        StaticArray of integer values from the start and end range.
     """
     # Handle cases where difference is negative or zero
     size_diff = end - start
@@ -112,7 +159,16 @@ def sa_range(start: int, end: int) -> StaticArray:
 
 def is_sorted(arr: StaticArray) -> int:
     """
-    TODO: Write this implementation
+    StaticArray sorter check
+
+    Args:
+        arr (StaticArray): StaticArray of integer values
+
+    Returns:
+        - 1 if the array is strictly monotonically increasing
+        - -1 if the array is strictly monotonically decreasing
+        - 0 if the array is neither strictly increasing nor decreasing
+    
     """
     # Using transitive property to apply monotonically increasing or decreasing 
     # sequences
@@ -143,29 +199,120 @@ def is_sorted(arr: StaticArray) -> int:
 
 def find_mode(arr: StaticArray) -> tuple[object, int]:
     """
-    TODO: Write this implementation
+    Find Mode Function
+
+    The function is used to find the statistical mode of the StaticArray
+
+    Args:
+        arr (StaticArray): StaticArray of object values
+
+    Returns:
+        tuple[object, int] => the mode of StaticArray, integer frequency of appearances in the StaticArray
     """
-    pass
+    mode = None
+    frequency = None
+    tracker = {}
+    for i in range(arr.length()):
+        temp = arr.get(i)
+        if tracker.get(temp) is None:
+            tracker[temp] = 1
+        else:
+            tracker[temp] += 1
+
+        if mode is None:
+            # Initialize mode and freq
+            mode = temp
+            frequency = tracker.get(temp)
+        elif (tracker.get(temp) > frequency) and (temp != mode):
+            # Update new mode and frequency
+            mode = temp
+            frequency = tracker.get(temp)
+        elif (temp == mode) and (tracker.get(temp) > frequency):
+            # Update frequency
+            frequency = tracker.get(temp)
+    return mode, frequency
+
 
 
 # ------------------- PROBLEM 8 - REMOVE_DUPLICATES -------------------------
 
-
+# [1, 1, 2]
+# [1, 2]
+# 0,1,2
+# 
 def remove_duplicates(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    StaticArray Duplicate remover
+
+    Removes duplicate values found in the StaticArray
+    and returns a new StaticArray of dedupped values.
+
+    Args:
+        arr (StaticArray): StaticArray of object values
+
+    Returns:
+        StaticArray of dedupped values
     """
-    pass
+    l = arr.length()
+    arr_values = []
+    # O(n)
+    for i in range(arr.length()):
+        temp = arr.get(i)
+        if temp not in arr_values:
+            arr_values.append(temp)
+    arr_export = StaticArray(size=len(arr_values))
+    # O(d) < O(n) => O(n)
+    for i, v in enumerate(arr_values):
+        arr_export.set(i, v)
+
+    return arr_export
+        
 
 
 # ------------------- PROBLEM 9 - COUNT_SORT --------------------------------
-
+# [3, 1, 2, 3, 1]
+# {1: 2, 2: 1, 3: 2}
+# {1: 2, 2: 3, 3: 5}
+# arr_val = 1
+# counter[arr_val] => 2
+# counter[arr_val] -= 1
 
 def count_sort(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    Count Sort algorithm (descending) implementation
+    
+    The count_sort function takes a StaticArray and returns
+    a new StaticArray of the original values in descending order.
+
+    Args:
+        arr (StaticArray): StaticArray of integer values
+
+    Returns:
+        StaticArray of integer values in descending order
     """
-    pass
+    counter = {}
+    arr_values = [arr.get(i) for i in range(arr.length())]
+    min, max = min_max(arr)
+    # Look through each value in the array and count them
+    for val in arr_values:
+        counter[val] = counter.get(val, 0) + 1
+
+    # From each value in the range of values observed for max and min
+    # we get the cumulative sum of the counts to find how many
+    # values are greater than or equal to the value at that position
+    # If we reverse it, we do the descending sort
+    # for i in range(min + 1, max + 1):
+    for i in range(max - 1, min - 1, -1):
+        # For descending sort we need to look back to the top for cum sum instead of behind
+        counter[i] = counter.get(i, 0) + counter.get(i + 1, 0)
+        # Ascending implementation for looking behind (i.e. i - 1)
+        # counter[i] = counter.get(i, 0) + counter.get(i - 1, 0)
+    count_sorted_arr = StaticArray(arr.length())
+    for ix in range(arr.length() - 1, -1, -1):
+        arr_val = arr.get(ix)
+        counter[arr_val] = counter[arr_val] - 1
+        count_sorted_arr.set(counter[arr_val], arr_val)
+    return count_sorted_arr
 
 
 # ------------------- PROBLEM 10 - SORTED SQUARES ---------------------------
@@ -173,9 +320,35 @@ def count_sort(arr: StaticArray) -> StaticArray:
 
 def sorted_squares(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    StaticArray sorter of squared values
+
+    sorted_squares takes the original array and applies the power of 2
+    or squares the integer value and sort the array in non-descending order.
+
+    This assumes the original array is already sorted in ascending order.
+
+    Args:
+        arr (StaticArray): StaticArray of integer values
+
+    Returns:
+        StaticArray of squared values sorted in ascending order.
     """
-    pass
+    arr_len = arr.length()
+    square_array = StaticArray(arr_len)
+    # Compare values on both ends and iterate when finding a higher value
+    # Update the index value higher or lower depending if the value found is
+    # higher than the value on the other side.
+    left_idx = 0
+    right_idx = arr_len - 1
+    for ix in range(arr_len - 1, -1, -1):
+        if (arr.get(left_idx) ** 2) < (arr.get(right_idx) ** 2):
+            square_array.set(ix, arr.get(right_idx) ** 2)
+            right_idx -= 1
+        else:
+            square_array.set(ix, arr.get(left_idx) ** 2)
+            left_idx += 1
+
+    return square_array
 
 
 # ------------------- BASIC TESTING -----------------------------------------
