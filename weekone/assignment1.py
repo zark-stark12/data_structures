@@ -1,9 +1,9 @@
-# Name:
-# OSU Email:
+# Name: Juan Felipe Zarco 
+# OSU Email: zarcoj@oregonstate.edu
 # Course: CS261 - Data Structures
-# Assignment:
-# Due Date:
-# Description:
+# Assignment: Assignment 1
+# Due Date: 2026-10-20
+# Description: Python assignment 1 data structures
 
 
 import random
@@ -27,7 +27,7 @@ def min_max(arr: StaticArray) -> tuple[int, int]:
     """
     max = arr.get(0)
     min = arr.get(0)
-    for i in range(arr.length()):
+    for i in range(1, arr.length()):
         val = arr.get(i)
         max = val if val > max else max
         min = val if val < min else min
@@ -302,8 +302,6 @@ def count_sort(arr: StaticArray) -> StaticArray:
     num_tracker = StaticArray(arr_len)
     num_tracker.set(0, arr.get(0))
     min, max = min_max(arr)
-    if min > 0:
-        min = 0
     # initialize k range
     k = max - min + 1
     # Initialize the counter for each unique value in the range
@@ -324,8 +322,8 @@ def count_sort(arr: StaticArray) -> StaticArray:
         # Set the count for the value in the counter plus 1
         counter.set(idx, counter.get(idx) + 1)
     # Cumulative counts (descending order)
-    for k in range(k - 2, -1, -1):
-        counter.set(k, counter.get(k) + counter.get(k + 1))
+    for j in range(k - 2, -1, -1):
+        counter.set(j, counter.get(j) + counter.get(j + 1))
     # Now we apply the sorting
     count_sorted_arr = StaticArray(arr_len)
     for i in range(arr_len - 1, -1, -1):
