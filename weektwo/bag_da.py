@@ -44,45 +44,114 @@ class Bag:
 
     def add(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Class function add
+
+        Adds / appends the value to the DynamicArray
+        data structure within the Bag.
+
+        Args:
+            value (object): value / object to add within the object
+        
+        Return:
+            None
         """
-        pass
+        self._da.append(value)
 
     def remove(self, value: object) -> bool:
         """
-        TODO: Write this implementation
+        Class function remove
+
+        Removes the value within the given data structure.
+        If the value was found and removed it will return True otherwise
+        False.
+
+        Args:
+            value (object): object value to remove from the data structure
+
+        Return:
+            bool if the value was removed successfully
         """
-        pass
+        for i in range(self.size()):
+            if self._da.get_at_index(i) == value:
+                self._da.remove_at_index(i)
+                return True
+        return False
 
     def count(self, value: object) -> int:
         """
-        TODO: Write this implementation
+        Class function count
+
+        Counts the total number of values that exist within
+        the internal data structure
+
+        Args:
+            value (object): object value to count
+
+        Returns:
+            int of the total number of observations of the value
         """
-        pass
+        arr = self._da.filter(lambda v: v == value)
+        return arr.length()
 
     def clear(self) -> None:
         """
-        TODO: Write this implementation
+        Class function clear
+
+        Clears the internal data structure overwriting the
+        data structure with a new instance of the data structure
+
+        Args:
+            None
+        
+        Return:
+            None
         """
-        pass
+        # Simply overwrite the old array with a new empty array
+        self._da = DynamicArray()
 
     def equal(self, second_bag: "Bag") -> bool:
         """
-        TODO: Write this implementation
+        The method returns True if the bags are equal (contain the same number of
+        elements, and also contain the same elements without regard to the order of elements).
+        Otherwise, it returns False. An empty bag is only considered equal to another empty bag.
         """
-        pass
+        if self._da.is_empty() and second_bag._da.is_empty():
+            return True
+        elif self.size() != second_bag.size():
+            return False
+        else:
+            for i in range(self.size()):
+                value = self._da.get_at_index(i)
+                val_cnt_bag_self = self.count(value)
+                val_cnt_bag_other = second_bag.count(value)
+                # print(f"First bag count: {val_cnt_bag_self}; Value: {value}")
+                # print(f"Second bag count: {val_cnt_bag_other}; Value: {value}")
+                if val_cnt_bag_self != val_cnt_bag_other:
+                    return False
+                
+            return True
 
     def __iter__(self):
         """
-        TODO: Write this implementation
+        Internal class iterator function to 
+        help track internal index
         """
-        pass
+        self._index = 0
+        return self
 
     def __next__(self):
         """
-        TODO: Write this implementation
+        Internal class iterator incrementor.
+        Helps increment the value of the iterator
+        and help stop iteration when reached its limit.
         """
-        pass
+        try:
+            value = self._da.get_at_index(self._index)
+        except DynamicArrayException:
+            raise StopIteration
+
+        self._index += 1
+        return value
 
 
 # ------------------- BASIC TESTING -----------------------------------------
@@ -121,12 +190,15 @@ if __name__ == "__main__":
     bag1 = Bag([10, 20, 30, 40, 50, 60])
     bag2 = Bag([60, 50, 40, 30, 20, 10])
     bag3 = Bag([10, 20, 30, 40, 50])
+    bag4 = Bag([1,2,2])
+    bag5 = Bag([2,1,2])
     bag_empty = Bag()
 
     print(bag1, bag2, bag3, bag_empty, sep="\n")
     print(bag1.equal(bag2), bag2.equal(bag1))
     print(bag1.equal(bag3), bag3.equal(bag1))
     print(bag2.equal(bag3), bag3.equal(bag2))
+    print(bag4.equal(bag5), bag5.equal(bag4))
     print(bag1.equal(bag_empty), bag_empty.equal(bag1))
     print(bag_empty.equal(bag_empty))
     print(bag1, bag2, bag3, bag_empty, sep="\n")

@@ -133,63 +133,306 @@ class DynamicArray:
 
     def resize(self, new_capacity: int) -> None:
         """
-        TODO: Write this implementation
+        Class function: resize
+
+        Resizes the given array to new capacity.
+        Capacity must be a positive number and cannot be lower
+        than the current total elements stored in the array.
+
+        Args:
+            new_capacity (int): value to adjust the limit of the Dynamic Array
+
+        Return:
+            None
         """
-        pass
+        if new_capacity < self.length() or new_capacity == 0:
+            return
+        else:
+            temp = StaticArray(new_capacity)
+            # initial_length = self.length()
+            for ix in range(new_capacity):
+                if ix > self.length() - 1:
+                    temp.set(ix, None)
+                else:
+                    temp.set(ix, self.get_at_index(ix))
+            self._data = temp
+            self._capacity = new_capacity
 
     def append(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Class method append
+
+        Appends element to the DynamicArray.
+        If the DynamicArray is at max capacity, the capacity
+        is resized to double it's current capacity.
+
+        Args:
+            value (object): value / element to append within the array
+
+        Return:
+            None
         """
-        pass
+        # Check if we're at max capacity
+        if self.get_capacity() == self.length():
+            self.resize(self.get_capacity() * 2)
+            # New index to append should be the end of the size
+            ix = self.length()
+            self._data.set(ix, value=value)
+            # Update size
+            self._size += 1
+        else:
+            # New index to append should be the end of the size
+            ix = self.length()
+            self._data.set(ix, value=value)
+            # Update size
+            self._size += 1
+
 
     def insert_at_index(self, index: int, value: object) -> None:
         """
-        TODO: Write this implementation
+        Class method insert_at_index
+
+        Inserts value at specified index.
+
+        If a value is at the index specified, values
+        are shifted right within the array to make room
+        for the new value.
+
+        Index must be a valid index between [0, N-1]
+        where N is the total elements.
+
+        Args:
+            index (int): position to insert
+            value (object): value to insert
+        
+        Return:
+            None
+
         """
-        pass
+        if index < 0 or index > self.length():
+            raise DynamicArrayException
+        # Let's check first if there is any value at the specified index
+        if self.get_capacity() == self.length():
+            self.resize(self.get_capacity() * 2)
+        elif index + 1 > self.get_capacity():
+            self.resize(self.get_capacity() * 2)
+        if self._data.get(index):
+            # Increment to the total size, not the total array to update
+            for i in range(self.length() - 1, index - 1, -1):
+                curr_val_at_ix = self.get_at_index(i)
+                # self.set_at_index(index=i+1, value=curr_val_at_ix)
+                self._data.set(index=i+1, value=curr_val_at_ix)
+            # Finally now that we shifted the values up we can set the value at the index
+            # with the new value
+            self.set_at_index(index=index, value=value)
+            # Since we always shift the values and never delete
+            # Need to increment the size
+            self._size += 1
+        else:
+            # If the index is None, update the value there.
+            self._data.set(index=index, value=value)
+            self._size += 1
 
     def remove_at_index(self, index: int) -> None:
         """
-        TODO: Write this implementation
+        Class method remove_at_index
+        
+        Removes value at specified index.
+
+        Value is removed at the specified index by shifting values
+        of the array to overwrite the current position.
+
+        If the total number of elements is smaller than the 
+        capacity / 4, we then resized in half.
+
+        The DynamicArray cannot be resized if the array capacity
+        is 10 or below.
+
+        Args:
+            index (int): position to remove value
+        
+        Return:
+            None
         """
-        pass
+        min_capacity_limit = 10
+        # Capacity check
+        # Comment to check the examples since examples are < 10 capacity
+        # if self.get_capacity() <= min_capacity_limit:
+        #     return
+        if index > self.length() - 1 or index < 0:
+            raise DynamicArrayException
+        # Check for size vs capacity ratio and ensure we are not resizing below 10
+        # We cannot reduce below 10 thus we apply this additional check
+        if self.length() < (self.get_capacity()/4):
+            # print("Uh oh we're here for capacity: ", self.get_capacity())
+            # print("What's twice the length? ", self.length() * 2)
+            if self.get_capacity() > min_capacity_limit and self.length() * 2 < min_capacity_limit:
+                self.resize(min_capacity_limit)
+            elif self.get_capacity() > min_capacity_limit and self.length() * 2 > min_capacity_limit:
+                self.resize(self.length() * 2)
+        # Main goal is to shift all the elements to overwrite / remove the element at the index
+        # We start at the index and look at the value to the right
+        
+        for i in range(index, self.length() - 1):
+            self.set_at_index(index=i, value=self._data.get(i + 1))
+        self.set_at_index(self.length() - 1, None)
+        self._size -= 1
+
 
     def slice(self, start_index: int, size: int) -> "DynamicArray":
         """
-        TODO: Write this implementation
+        Class function slice
+
+        The function returns a DynamicArray of the array values between
+        the start index and total size.
+
+        The start_index and start_index + size must be between
+        [0, N-1] where N is the total elements.
+
+        Args:
+            start_index (int): beginning index to slice from
+            size (int): total elements to slice
+        
+        Returns:
+            DynamicArray of the sliced values
         """
-        pass
+        if start_index < 0 or start_index > self.length() - 1:
+            raise DynamicArrayException
+        elif size > self.length() or start_index + size > self.length() or size < 0:
+            raise DynamicArrayException
+
+        arr = DynamicArray()
+        for i in range(start_index, start_index + size):
+            arr.append(self.get_at_index(i))
+        return arr
+
 
     def merge(self, second_da: "DynamicArray") -> None:
         """
-        TODO: Write this implementation
+        Class method merge
+
+        Merges the values of the DynamicArry into the current 
+        array.
+
+        Args:
+            seconda_da (DynamicArray): the DynamicArray to merge the values
+
+        Return:
+            None
         """
-        pass
+        for j in range(second_da.length()):
+            self.append(second_da.get_at_index(j))
 
     def map(self, map_func) -> "DynamicArray":
         """
-        TODO: Write this implementation
+        Class method map
+
+        Class method to apply the mapping function 
+        at each value within the Dynamic Array.
+
+        Args:
+            map_func: Python function to map against the values
+
+        Return:
+            DynamicArray with the values applied from the map_func
+
         """
-        pass
+        arr = DynamicArray()
+        for i in range(self.length()):
+            arr.append(map_func(self.get_at_index(i)))
+
+        return arr
 
     def filter(self, filter_func) -> "DynamicArray":
         """
-        TODO: Write this implementation
+        Class method filter
+
+        The function helps apply the filter function
+        to the values of the array if it passes the filter function
+        which should return a boolean value.
+
+        Args:
+            filter_func: Python function that returns a boolean
+        
+        Return:
+            DynamicArray of the values that returned True from the filter_func
         """
-        pass
+        arr = DynamicArray()
+        for i in range(self.length()):
+            if filter_func(self.get_at_index(i)):
+                arr.append(self.get_at_index(i))
+
+        return arr
 
     def reduce(self, reduce_func, initializer=None) -> object:
         """
-        TODO: Write this implementation
+        Class method reduce
+
+        Function applies the reduce_func to help reduce 
+        and merge the values of the array from the reduce_func
+        itself.
+
+        Args:
+            reduce_func: Python function to apply the reduction
+            initiliazer: Optional value to help apply the first value for the reduce_func
+
+        Return:
+            object value as a result of the reduce_func
         """
-        pass
+        head = None
+        if self.is_empty():
+            return initializer
+
+        if self.length() == 1 and initializer:
+            return reduce_func(initializer, self.get_at_index(0))
+        elif self.length() == 1:
+            return self.get_at_index(0)
+        
+        if initializer:
+            head = reduce_func(initializer, self.get_at_index(0))
+            for i in range(1, self.length()):
+                head = reduce_func(head, self.get_at_index(i))
+        else:
+            head = reduce_func(self.get_at_index(0), self.get_at_index(1))
+            for i in range(2, self.length()):
+                head = reduce_func(head, self.get_at_index(i))
+        return head
 
 def find_mode(arr: DynamicArray) -> tuple[DynamicArray, int]:
     """
-    TODO: Write this implementation
+    find_mode
+
+    Using similar construction as from week one for mode and frequency
     """
-    pass
+    # initialize mode and frequency
+    mode = arr.get_at_index(0)
+    frequency = 1
+    arr_len = arr.length()
+    # Intialize tracker for looping
+    tracking_val = mode
+    tracking_count = frequency
+
+    mode_arr = DynamicArray()
+    mode_arr.append(mode)
+    for i in range(1, arr_len):
+        new_value = arr.get_at_index(i)
+        if new_value == tracking_val:
+            tracking_count += 1
+        else:
+            tracking_val = new_value
+            tracking_count = 1
+
+        if tracking_count == frequency:
+            mode_arr.append(tracking_val)
+            mode, frequency = tracking_val, tracking_count
+        elif tracking_count > frequency:
+            # New frequency found overwrite old array and append new value
+            mode_arr = DynamicArray()
+            mode_arr.append(tracking_val)
+            # Update frequency / tracking count
+            mode, frequency = tracking_val, tracking_count
+
+    return mode_arr, frequency
 
 
 # ------------------- BASIC TESTING -----------------------------------------
