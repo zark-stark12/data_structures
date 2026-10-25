@@ -71,49 +71,157 @@ class LinkedList:
         """
         TODO: Write this implementation
         """
-        pass
+        # If we have a node after Sentinel, then insert at front
+        if not self.is_empty():
+            # Copy previous next value of sentinel node
+            curr_sent_next = self._head.next
+            # overwrite the sentinel node next value with new node insert
+            self._head.next = SLNode(value=value)
+            # Point the previous next value to the new insertion
+            self._head.next.next = curr_sent_next
+            return
+        # Otherwise the LinkedList is empty and insert new node at head
+        else:
+            self._head.next = SLNode(value=value)
+            return
 
     def insert_back(self, value: object) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        curr_node = self._head
+        if curr_node:
+            prev_node = None
+            while curr_node:
+                prev_node = curr_node
+                curr_node = curr_node.next
+            prev_node.next = SLNode(value=value)
+        else:
+            self._head.next = SLNode(value=value)
 
     def insert_at_index(self, index: int, value: object) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        if index < 0 or index > self.length():
+            raise SLLException
+        
+        curr_node = self._head # Sentinel node
+        # Create new node to insert
+        new_node = SLNode(value=value)
+        # Loop to the correct node
+        for i in range(index):
+            curr_node = curr_node.next
+        # point new node next to previous current nodes next
+        new_node.next = curr_node.next
+        # point current node next to new node
+        curr_node.next = new_node
+        
 
     def remove_at_index(self, index: int) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+        if index < 0 or index >= self.length() or self.is_empty():
+            raise SLLException
+        
+        curr_node = self._head
+        if index == 0:
+            curr_node.next = curr_node.next.next
+        else:
+            prev_node = curr_node
+            for i in range(index):
+                prev_node = curr_node
+                curr_node = curr_node.next
+            # Overwrite the current node to remove the node at the index
+            # We overwrite the value with the next node we want to remove
+            # with it's next pointer
+            curr_node.next = curr_node.next.next
 
     def remove(self, value: object) -> bool:
         """
         TODO: Write this implementation
         """
-        pass
+        curr_node = self._head
+        prev_node = curr_node
+        while curr_node and curr_node.value != value:
+            # Remember the previous node
+            prev_node = curr_node
+            # Update the current mode
+            curr_node = curr_node.next
+        # If we stil have a Node at the end of traversal
+        if curr_node:
+            prev_node.next = curr_node.next
+            return True
+        else:
+            return False
 
     def count(self, value: object) -> int:
         """
         TODO: Write this implementation
         """
-        pass
+        counter = 0
+        curr_node = self._head
+        while curr_node:
+            if curr_node.value == value:
+                counter += 1
+            # Update the current mode
+            curr_node = curr_node.next
+
+        return counter
 
     def find(self, value: object) -> bool:
         """
         TODO: Write this implementation
         """
-        pass
+        curr_node = self._head
+        found = False
+        while curr_node and not found:
+            if curr_node.value == value:
+                found = True
+                return found
+            else:
+                curr_node = curr_node.next
+
+        return found
 
     def slice(self, start_index: int, size: int) -> "LinkedList":
         """
         TODO: Write this implementation
         """
-        pass
+
+        end_ix = start_index + size - 1
+        # length = 10
+        # start = 10
+        # size = 0
+        # end = 10 + 0 - 1 = 9
+        if start_index < 0 or (end_ix) >= self.length() or size < 0 or self.is_empty() or start_index >= self.length():
+            raise SLLException
+        # Track when we reach the start index
+        _iter = 0
+        # Init curr node tracker
+        curr_node = self._head
+        # Tracker to know when we're slicing still
+        slicing = True
+        # Build end index based on size
+        
+        # Linked List to export
+        ll = LinkedList()
+        # Beginning going through the list to find when we start 
+        while curr_node and slicing:
+            # iterate to next node
+            curr_node = curr_node.next
+            # Check if we're in the range of slicing and inserting the value into new LinkedList
+            if _iter >= start_index and _iter <= end_ix:
+                ll.insert_back(curr_node.value)
+            elif _iter > end_ix:
+                slicing = False
+            _iter += 1
+
+        return ll
+            
+
+        
 
 
 # ------------------- BASIC TESTING -----------------------------------------

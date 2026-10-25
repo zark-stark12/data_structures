@@ -91,19 +91,51 @@ class Queue:
         """
         TODO: Write this implementation
         """
-        pass
+        # Check if our StaticArray is at capacity to resize
+        if self.size() == self._sa.length():
+            new_size = self.size() * 2 if self.size() >= 1 else 1
+            new_sa = StaticArray(new_size)
+            # Need to copy old values into new array
+            for i in range(self.size()):
+                # e.g. if front is 3 and length is 5, we get the 3 ix,
+                # if the capcaity is 5 and the currenty staticarray is 5, it
+                # will loop back around to get the correct value using the modulus operator
+                queue_idx = (self._front + i) % self._sa.length()
+                new_sa.set(i, self._sa.get(queue_idx))
+            # We've resized it and copied it!
+            self._sa = new_sa
+            # Update the front and back now that we've resized it
+            self._front = 0
+            self._back = self._current_size - 1
+        # Increment back of queue
+        # This should be similar to how we resized it methodology
+        # We should capture the wrapping around if we need to
+        self._back = (self._back + 1) % self._sa.length()
+        self._sa.set(self._back, value)
+        self._current_size += 1
 
     def dequeue(self) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.is_empty():
+            raise QueueException
+        
+        front_queue_val = self._sa.get(self._front)
+        # Ignore this, do not overwrite array index value with None!
+        # self._sa.set(self._front, None)
+        self._front = (self._front + 1) % self._sa.length() # Change front of queue and wrap around length of array
+        self._current_size -= 1
+        return front_queue_val
 
     def front(self) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.is_empty():
+            raise QueueException
+
+        return self._sa.get(self._front)
 
     # The method below is optional, but recommended, to implement. #
     # You may alter it in any way you see fit.                     #
@@ -134,10 +166,13 @@ if __name__ == "__main__":
         q.enqueue(value)
     print(q)
     for _ in range(q.size() + 1):
+        # print("Indexing value: ", _)
+        # print("Current size: ", q._current_size)
         try:
             print(q.dequeue())
         except Exception as e:
             print("No elements in queue", type(e))
+    # print("Front value of queue: ", q._front)
     for value in [6, 7, 8, 111, 222, 3333, 4444]:
         q.enqueue(value)
     print(q)

@@ -65,19 +65,36 @@ class Stack:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.is_empty():
+            self._head = SLNode(value)
+        else:
+            top = self._head
+            self._head = SLNode(value)
+            self._head.next = top
 
     def pop(self) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+        if self.is_empty():
+            raise StackException
+        
+        top_pancake = self._head
+        next_pancake = self._head.next
+        self._head = next_pancake
+        return top_pancake.value
+
 
     def top(self) -> object:
         """
         TODO: Write this implementation
         """
-        pass
+
+        if self.is_empty():
+            raise StackException
+
+        return self._head.value
+
 
 
 # ------------------- BASIC TESTING -----------------------------------------
