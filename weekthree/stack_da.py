@@ -52,13 +52,30 @@ class Stack:
 
     def push(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        class function push
+
+        pushes the value to the top of the stack within
+        the DynamicArray object
+
+        Args:
+            value (object): value to stack on top
+
+        Return:
+            None
         """
         self._da.append(value)
 
     def pop(self) -> object:
         """
-        TODO: Write this implementation
+        class function pop
+
+        pops the value on top of the stack
+
+        Args:
+            None
+        
+        Return:
+            object value existing on top of the stack
         """
         if self.is_empty():
             raise StackException
@@ -68,7 +85,16 @@ class Stack:
     
     def top(self) -> object:
         """
-        TODO: Write this implementation
+        class function top
+
+        Reveals the object on top of the stack without
+        removing the value from the stack.
+
+        Args:
+            None
+
+        Return:
+            object value on top of the stack
         """
         if self.is_empty():
             raise StackException

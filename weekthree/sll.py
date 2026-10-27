@@ -69,7 +69,15 @@ class LinkedList:
 
     def insert_front(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        class function insert_front
+
+        Inserts a Node object at the front of the Linked List
+
+        Args:
+            value (object): value to insert into Node Object to insert at the LinkedList
+
+        Return:
+            None
         """
         # If we have a node after Sentinel, then insert at front
         if not self.is_empty():
@@ -87,7 +95,15 @@ class LinkedList:
 
     def insert_back(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        class function insert_back
+
+        Inserts a Node object at the back of the Linked List
+
+        Args:
+            value (object): value to insert into Node Object to insert at the LinkedList
+
+        Return:
+            None
         """
         curr_node = self._head
         if curr_node:
@@ -101,7 +117,17 @@ class LinkedList:
 
     def insert_at_index(self, index: int, value: object) -> None:
         """
-        TODO: Write this implementation
+        class function insert_at_index
+
+        Inserts the value at the corresponding index number
+        related to the number of nodes in the Linked List.
+
+        Args:
+            index (int): index in which to insert the value
+            value (object): value to create Node for which to insert at the index
+
+        Return:
+            None
         """
         if index < 0 or index > self.length():
             raise SLLException
@@ -120,7 +146,16 @@ class LinkedList:
 
     def remove_at_index(self, index: int) -> None:
         """
-        TODO: Write this implementation
+        class function remove_at_index
+        
+        Remove the value at the corresponding index number
+        related to the number of nodes in the Linked List.
+
+        Args:
+            index (int): index in which to remove the value
+
+        Return:
+            None
         """
         if index < 0 or index >= self.length() or self.is_empty():
             raise SLLException
@@ -140,7 +175,18 @@ class LinkedList:
 
     def remove(self, value: object) -> bool:
         """
-        TODO: Write this implementation
+        class function remove
+
+        function removes the value corresponding
+        to the Node for which it exists in the LinkedList.
+        If the value / Node exists, then the function will return True
+        to indicate the Node has been removed successfully, else False.
+
+        Args:
+            value (object): value to remove from LinkedList
+
+        Return
+            bool to indicate if the value was removed 
         """
         curr_node = self._head
         prev_node = curr_node
@@ -158,7 +204,15 @@ class LinkedList:
 
     def count(self, value: object) -> int:
         """
-        TODO: Write this implementation
+        class function count
+
+        counts the total Nodes for which the value exists in
+
+        Args:
+            value (object): value to count within the LinkedList
+
+        Return:
+            int of the total count of the object
         """
         counter = 0
         curr_node = self._head
@@ -172,7 +226,15 @@ class LinkedList:
 
     def find(self, value: object) -> bool:
         """
-        TODO: Write this implementation
+        class function find
+
+        finds the value within the LinkedList if it exists
+
+        Args:
+            value (object): object to search for within the LinkedList
+
+        Returns:
+            bool if whether the object was found in the LinkedList
         """
         curr_node = self._head
         found = False
@@ -187,7 +249,17 @@ class LinkedList:
 
     def slice(self, start_index: int, size: int) -> "LinkedList":
         """
-        TODO: Write this implementation
+        class function slice
+
+        slices the LinkedList nodes / values within the LinkedList
+        based on the start index and size.
+
+        Args:
+            start_index (int): starting index value to begin slicing from
+            size (int): total values to slice
+
+        Return:
+            LinkedList of the sliced Nodes / values
         """
 
         end_ix = start_index + size - 1

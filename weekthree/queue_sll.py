@@ -64,7 +64,18 @@ class Queue:
 
     def enqueue(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        class function enqueue
+        
+        Enqueue's the value within the LinkedList object.
+
+        The object is stored within the ordered of which the object
+        was queued in.
+
+        Args:
+            value (object): value to enqueue
+
+        Return:
+            None
         """
         if self.is_empty():
             self._head = SLNode(value)
@@ -76,7 +87,18 @@ class Queue:
 
     def dequeue(self) -> object:
         """
-        TODO: Write this implementation
+        class function dequeue
+        
+        Dequeue's the value within the Queue object.
+
+        Object is dequeued and returned in which the order
+        it was stored in.
+
+        Args:
+            None
+
+        Returns:
+            Object
         """
         if self.is_empty():
             raise QueueException
@@ -87,7 +109,17 @@ class Queue:
 
     def front(self) -> object:
         """
-        TODO: Write this implementation
+        class function front
+        
+        Function returns the front value at the head
+        of the queue. It returns the object at the front
+        without dequeueing the object
+
+        Args:
+            None
+
+        Returns:
+            Object
         """
         if self.is_empty():
             raise QueueException
