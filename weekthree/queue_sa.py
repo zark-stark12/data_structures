@@ -89,24 +89,22 @@ class Queue:
 
     def enqueue(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        class function enqueue
+
+        Enqueue's the value within the StaticArray object.
+
+        The object is stored within the ordered of which the object
+        was queued in.
+
+        Args:
+            value (object): value to enqueue
+
+        Return:
+            None
         """
         # Check if our StaticArray is at capacity to resize
         if self.size() == self._sa.length():
-            new_size = self.size() * 2 if self.size() >= 1 else 1
-            new_sa = StaticArray(new_size)
-            # Need to copy old values into new array
-            for i in range(self.size()):
-                # e.g. if front is 3 and length is 5, we get the 3 ix,
-                # if the capcaity is 5 and the currenty staticarray is 5, it
-                # will loop back around to get the correct value using the modulus operator
-                queue_idx = (self._front + i) % self._sa.length()
-                new_sa.set(i, self._sa.get(queue_idx))
-            # We've resized it and copied it!
-            self._sa = new_sa
-            # Update the front and back now that we've resized it
-            self._front = 0
-            self._back = self._current_size - 1
+            self._double_queue()
         # Increment back of queue
         # This should be similar to how we resized it methodology
         # We should capture the wrapping around if we need to
@@ -116,7 +114,18 @@ class Queue:
 
     def dequeue(self) -> object:
         """
-        TODO: Write this implementation
+        class function dequeue
+
+        Dequeue's the value within the Queue object.
+
+        Object is dequeued and returned in which the order
+        it was stored in.
+
+        Args:
+            None
+
+        Returns:
+            Object
         """
         if self.is_empty():
             raise QueueException
@@ -130,7 +139,18 @@ class Queue:
 
     def front(self) -> object:
         """
-        TODO: Write this implementation
+        class function front
+
+        Function returns the front value at the head
+        of the queue. It returns the object at the front
+        without dequeueing the object
+
+        Args:
+            None
+
+        Returns:
+            Object
+        
         """
         if self.is_empty():
             raise QueueException
@@ -142,9 +162,27 @@ class Queue:
 
     def _double_queue(self) -> None:
         """
-        TODO: Write this implementation
+        Private function _double_queue
+
+        Class function that helps resize the StaticArray
+        when the array size is full when attempting to enqueue.
         """
-        pass
+        new_size = self.size() * 2 if self.size() >= 1 else 1
+        new_sa = StaticArray(new_size)
+        # Need to copy old values into new array
+        for i in range(self.size()):
+            # e.g. if front is 3 and length is 5, we get the 3 ix,
+            # if the capcaity is 5 and the currenty staticarray is 5, it
+            # will loop through the size starting at the front
+            # and then back around to get the correct value using the modulus operator
+            queue_idx = (self._front + i) % self._sa.length()
+            new_sa.set(i, self._sa.get(queue_idx))
+        # We've resized it and copied it!
+        self._sa = new_sa
+        # Update the front and back now that we've resized it
+        self._front = 0
+        # Back index will be current size of elements minus 1
+        self._back = self._current_size - 1
 
 
 # ------------------- BASIC TESTING -----------------------------------------
