@@ -150,8 +150,8 @@ class Queue:
 
         Returns:
             Object
-        
         """
+        
         if self.is_empty():
             raise QueueException
 
