@@ -100,7 +100,17 @@ class AVL(BST):
 
     def add(self, value: object) -> None:
         """
-        TODO: Write your implementation
+        class function add
+
+        Function adds the value object into the AVL tree within the AVL node
+        that contains the parent and height parameter on top
+        of the existing Binary search tree node object.
+
+        Args:
+            value (object): value to add to the AVL tree
+
+        Return:
+            None
         """
         if self.is_empty():
             self._root = AVLNode(value)
@@ -112,6 +122,7 @@ class AVL(BST):
                 # If the input value is greater than or equal to node value
                 # Input new node as right leaft
                 if value == node.value:
+                    # Return if duplicate value was found to ensure no duplicates are added
                     return
                 elif value >= node.value:
                     if node.right:
@@ -136,11 +147,20 @@ class AVL(BST):
 
     def remove(self, value: object) -> bool:
         """
-        TODO: Write your implementation
+        class function remove
+
+        Finds and removes the value from the AVL tree if the value was found
+
+        Args:
+            value (object): value to remove from the AVL tree
+
+        Return:
+            bool if the object was found and removed
         """
         if self.is_empty():
             return False
         else:
+            # get the starting root to iterate through for removal
             node = self.get_root()
             parent = None
             # Find the node to remove
@@ -156,6 +176,7 @@ class AVL(BST):
             
             if node.left and node.right:
                 # get the successor parent to rebalance the tree on after removal
+                # this sets the rebalancing point based on the successors parent
                 rebalanced = self._remove_two_subtrees(parent, node)
             else:
                 # the nodes parent is the pivot point to begin rebalancing
@@ -172,7 +193,7 @@ class AVL(BST):
                     node.parent.left = leaf
                 else:
                     node.parent.right = leaf
-
+            # Rebalance the AVL tree after removal
             if rebalanced:
                 self._rebalance(rebalanced)
 
@@ -181,42 +202,46 @@ class AVL(BST):
 
     def _remove_two_subtrees(self, remove_parent: AVLNode, remove_node: AVLNode) -> AVLNode:
         """
-        TODO: Write your implementation
+        private helper class function to remove the node that has two exisiting leaf nodes under it
         """
+        # first go right init the successor
         successor = remove_node.right
+        # init the successor parent as the remove node
         successor_parent = remove_node
+        # Continue left to get the next successor to replace the remove node
         while successor.left:
             successor_parent = successor
             successor = successor.left
-
+        # point the value of the remove node to the successors value
         remove_node.value = successor.value
-
+        # if there's a successor right, point it to the leaf above it previously to it's right
         if successor.right is not None:
             successor.right.parent = successor_parent
-
+        # Same thing but with the left but point successor's right to it's left
         if successor is successor_parent.left:
             successor_parent.left = successor.right
         else:
             successor_parent.right = successor.right
-
+        # return the successor parent to help rebalance the AVL tree
         return successor_parent
 
     def _balance_factor(self, node: AVLNode) -> int:
         """
-        TODO: Write your implementation
+        private helper function to calculate the balance factor of a node / leaf
         """
         return self._get_height(node.right) - self._get_height(node.left)
 
     def _get_height(self, node: AVLNode) -> int:
         """
-        TODO: Write your implementation
+        private helper function to retrieve the heigh of a node / leaf
         """
         return node.height if node else -1
 
     def _rotate_left(self, node: AVLNode) -> AVLNode:
         """
-        TODO: Write your implementation
+        private helper function to rotate the avl tree nodes left to balance
         """
+        # Since we're rotating left, start from the right of the node to move left
         root = node.right
         node.right = root.left
         if root.left:
@@ -239,7 +264,7 @@ class AVL(BST):
 
     def _rotate_right(self, node: AVLNode) -> AVLNode:
         """
-        TODO: Write your implementation
+        private helper function to rotate the avl tree nodes right to balance
         """
         # rotating right thus we need to reference the new root coming from the left
         root = node.left
@@ -264,7 +289,7 @@ class AVL(BST):
 
     def _update_height(self, node: AVLNode) -> None:
         """
-        TODO: Write your implementation
+        private helper function to help update the height of the AVL node / leaf
         """
         left_height = self._get_height(node.left)
         right_height = self._get_height(node.right)
@@ -272,7 +297,10 @@ class AVL(BST):
 
     def _rebalance(self, node: AVLNode) -> None:
         """
-        TODO: Write your implementation
+        private helper function to help rebalance the AVL tree utilizing other helper functions derived.
+
+        The function helpers update heights and calculates balance factors while rotating based on the 
+        current balance factor.
         """
         while node:
             self._update_height(node)
